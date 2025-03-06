@@ -400,7 +400,7 @@ function release(e) {
     for (let s = 0; s < scales.length; s++) {
       synth.triggerRelease(scales[s][obj.scaleNum] + obj.octave)
     }
-    // synth.triggerRelease(scale[obj.scaleNum] + obj.octave)
+    synth.triggerRelease(scale[obj.scaleNum] + obj.octave)
     obj.pressed = false
   }
 }
