@@ -38,12 +38,19 @@ function syncClock () {
     lastSecond = s // this ensures it only updates once per second
     if (s % 4 === 0) {
       // PUT STUFF HERE 
-
       // scale changing
       scaleIndex++
       if (scaleIndex !== 0 && scaleIndex % scales.length === 0) {scaleIndex = 0}
       scale = scales[scaleIndex]
-      console.log(scaleIndex, scale[0])   
+      console.log(scaleIndex, scale[0])
+    }
+    if (time === 10) {
+      volSlider.value = -20
+      synth.set({"oscillator": {"volume": volSlider.value}})
+    }
+    else if (time === 15) {
+      volSlider.value = 0
+      synth.set({"oscillator": {"volume": volSlider.value}})
     }
   } 
 }
