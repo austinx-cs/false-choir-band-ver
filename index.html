@@ -18,12 +18,13 @@ let paused = false
 // globals for sync
 const scales = [
 //["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
-  ["C", "C", "D", "D", "E", "F", "F", "G", "G", "A", "A", "B"],
-  ["D", "D", "E", "E", "F", "G", "G", "A", "A", "B", "B", "C"]
+  ["E", "E", "G#", "G#", "B", "D", "D", "E", "E", "G#", "G#", "B"],
+  ["A", "A", "C", "C", "E", "A", "A", "C", "C", "E", "E", "A"]
 ]
 let scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 let lastSecond = -1 // this is to "gate" the conditional below
 let scaleIndex = -1
+let time = -1
 
 // syncclock
 // we'll use our system clock (new Date) to stay in sync
@@ -31,13 +32,19 @@ function syncClock () {
   window.requestAnimationFrame(syncClock)
   const d = new Date()
   const s = d.getSeconds()
-  if (s % 4 === 0 && s !== lastSecond) {
-    // PUT STUFF HERE 
-    scaleIndex++
-    if (scaleIndex !== 0 && scaleIndex % scales.length === 0) {scaleIndex = 0}
+  if (s !== lastSecond) {
+    time++
+    console.log("time:", time)
     lastSecond = s // this ensures it only updates once per second
-    scale = scales[scaleIndex]
-    console.log(scaleIndex, scale[0])
+    if (s % 4 === 0) {
+      // PUT STUFF HERE 
+
+      // scale changing
+      scaleIndex++
+      if (scaleIndex !== 0 && scaleIndex % scales.length === 0) {scaleIndex = 0}
+      scale = scales[scaleIndex]
+      console.log(scaleIndex, scale[0])   
+    }
   } 
 }
 
@@ -390,7 +397,10 @@ function keyStart(e) {
 function release(e) {
   const obj = keyMap[e.key]
   if (obj && obj.pressed) {
-    synth.triggerRelease(scale[obj.scaleNum] + obj.octave)
+    for (let s = 0; s < scales.length; s++) {
+      synth.triggerRelease(scales[s][obj.scaleNum] + obj.octave)
+    }
+    // synth.triggerRelease(scale[obj.scaleNum] + obj.octave)
     obj.pressed = false
   }
 }
