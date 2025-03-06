@@ -16,27 +16,28 @@ let partials = []
 let paused = false
 
 // globals for sync
-const chords = [
-  ['C4', 'E4', 'G4'],
-  ['E4', 'F#4', 'G#4']
+const scales = [
+//["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
+  ["C", "C", "D", "D", "E", "F", "F", "G", "G", "A", "A", "B"],
+  ["D", "D", "E", "E", "F", "G", "G", "A", "A", "B", "B", "C"]
 ]
-const scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+let scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 let lastSecond = -1 // this is to "gate" the conditional below
-let playedNote // we'll use this to keep track of the note we played
-let chordIndex = 0 // which chord in the collection
-let noteIndex = 0 // which note in the chord (try each person setting a different noteIndex to start with)
+let scaleIndex = -1
 
 // syncclock
 // we'll use our system clock (new Date) to stay in sync
 function syncClock () {
   window.requestAnimationFrame(syncClock)
   const d = new Date()
-  const s = d.getSeconds() 
-  // every 4 seconds switch chord
+  const s = d.getSeconds()
   if (s % 4 === 0 && s !== lastSecond) {
-    chordIndex++
+    // PUT STUFF HERE 
+    scaleIndex++
+    if (scaleIndex !== 0 && scaleIndex % scales.length === 0) {scaleIndex = 0}
     lastSecond = s // this ensures it only updates once per second
-    console.log(chordIndex)
+    scale = scales[scaleIndex]
+    console.log(scaleIndex, scale[0])
   } 
 }
 
@@ -108,10 +109,10 @@ function updateVolume(e) {
 // html stuff-------------------------------------------------------------
 //title
 nn.create('title')
-  .content('[false choir]')
+  .content('[false choir] (band ver.)')
   .addTo('body')
 nn.create('text')
-  .content('[false choir] \xa0 [by austin xie] \xa0 [midi recommended]')
+  .content('[false choir] (band ver.) \xa0 [by austin xie] \xa0 [midi recommended]')
   .addTo('body')
 //instructions
 nn.create('br').addTo('body')
