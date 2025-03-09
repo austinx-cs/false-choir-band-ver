@@ -19,12 +19,13 @@ let paused = false
 const scales = [
 //["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
   ["E", "E", "G#", "G#", "B", "D", "D", "E", "E", "G#", "G#", "B"],
-  ["A", "A", "C", "C", "E", "A", "A", "C", "C", "E", "E", "A"]
+  //["A", "A", "C", "C", "E", "A", "A", "C", "C", "E", "E", "A"]
 ]
 let scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 let lastSecond = -1 // this is to "gate" the conditional below
 let scaleIndex = -1
 let time = -1
+let timeLabel
 
 // syncclock
 // we'll use our system clock (new Date) to stay in sync
@@ -34,6 +35,7 @@ function syncClock () {
   const s = d.getSeconds()
   if (s !== lastSecond) {
     time++
+    timeLabel.content('\xa0\xa0time: ' + String(time))
     console.log("time:", time)
     lastSecond = s // this ensures it only updates once per second
     if (s % 4 === 0) {
@@ -141,10 +143,13 @@ nn.create('text')
 nn.create('br').addTo('body')
 //sync
 nn.create('br').addTo('body')
-  nn.create('button')
+nn.create('button')
   .content('sync')
   .addTo('body')
   .on('click', syncClock)
+timeLabel = nn.create('label')
+  .content('\xa0\xa0time: _')
+  .addTo('body')
 //wave&spectrum
 const wave = createWaveform()
 synth.connect(wave)
@@ -154,12 +159,12 @@ synth.connect(spec)
 tsynth.connect(spec)
 //volume
 nn.create('label')
-    .content('volume boost: ')
-    .addTo('body')
+  .content('volume boost: ')
+  .addTo('body')
 const volSlider = nn.create('input')
-    .set({ type: 'range', value: 0, min: -20, max: 0, step: 1 })
-    .addTo('body')
-    .on('input', updateVolume)
+  .set({ type: 'range', value: 0, min: -20, max: 0, step: 1 })
+  .addTo('body')
+  .on('input', updateVolume)
 volSlider.value = -20
 nn.create('br').addTo('body')
 nn.create('br').addTo('body')
