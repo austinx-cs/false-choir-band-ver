@@ -20,15 +20,36 @@ const scales = [
   ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
 ]
 
+const intro = [
+  ["C", "D", "E", "F", "G", "C", "G", "E", "A", "G", "B", "C"], // added scale tones on black keys
+  ["E", "E", "A", "A", "A", "C", "C", "E", "E", "A", "A", "A"],
+]
+
+const buildup = [
+  ["C", "C", "C", "C", "E", "E", "E", "G", "G", "A", "A", "A"],
+  //["C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"],
+  //["C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"],
+  //["C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"],
+  //["G", "G", "Eb", "Eb", "F", "C", "C", "G", "G", "Eb", "Eb", "F"],
+  //["C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"],
+  //["C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"],
+  //["C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"],
+  //["F", "F", "A", "A", "F", "C", "C", "F", "F", "A", "A", "F"],
+]
+
+const crunchy = [ // d minor
+  
+]
+
 const bridge = [
   ["A", "A", "C", "C", "E", "A", "A", "C", "C", "E", "E", "A"],
-  ["F", "F", "A", "A", "C", "F", "F", "A", "A", "C", "C", "F"],
+  ["F", "F", "A", "A", "C", "E", "E", "F", "F", "A", "A", "C"],
   ["A", "A", "C", "C", "E", "A", "A", "C", "C", "E", "E", "A"],
   ["F", "F", "A", "A", "C", "F", "F", "A", "A", "C", "C", "F"],
   ["A", "A", "C", "C", "E", "A", "A", "C", "C", "E", "E", "A"],
   ["C", "C", "E", "E", "G", "C", "C", "E", "E", "G", "G", "C"],
   ["F", "F", "A", "A", "C", "F", "F", "A", "A", "C", "C", "F"],
-  ["G", "G", "B", "B", "D", "G", "G", "B", "B", "D", "D", "G"]
+  ["G", "G", "B", "B", "D", "E", "E", "G", "G", "B", "B", "D"]
 ]
 
 const jam = [
@@ -37,7 +58,7 @@ const jam = [
   ["D", "D", "F", "F", "A", "D", "D", "F", "F", "A", "A", "D"],	
   ["G", "G", "B", "B", "D", "G", "G", "B", "B", "D", "D", "G"], 
   ["A", "A", "C", "C", "E", "A", "A", "C", "C", "E", "E", "A"],
-  ["A", "A", "B", "B", "D", "F", "F", "A", "A", "B", "B", "D"],
+  ["A", "A", "B", "B", "D", "A", "A", "B", "B", "D", "D", "A"],
   ["A", "A", "C", "C", "E", "A", "A", "C", "C", "E", "E", "A"],
   ["A", "A", "B", "B", "D", "F", "F", "A", "A", "B", "B", "D"],
 ]
@@ -48,7 +69,7 @@ const outro = [
   ["A", "A", "C", "C", "E", "A", "A", "C", "C", "E", "E", "A"],
   ["A", "A", "C", "C", "E", "A", "A", "C", "C", "E", "E", "A"],
   ["A", "A", "C", "C", "E", "A", "A", "C", "C", "E", "E", "A"],
-  ["A", "A", "B", "B", "D", "F", "F", "A", "A", "B", "B", "D"],
+  ["A", "A", "B", "B", "D", "A", "A", "B", "B", "D", "D", "A"],
   ["A", "A", "C", "C", "E", "A", "A", "C", "C", "E", "E", "A"],
   ["A", "A", "C", "C", "E", "A", "A", "C", "C", "E", "E", "A"],
 ]
@@ -59,6 +80,13 @@ let scaleIndex = -1
 let time = -1
 let timeLabel
 
+// composition-based updates
+function cUpdate(t) {
+  if (t === 8) {
+    synth.set()
+  }
+}
+
 // syncclock
 // we'll use our system clock (new Date) to stay in sync
 function syncClock () {
@@ -66,25 +94,17 @@ function syncClock () {
   const d = new Date()
   const s = d.getSeconds()
   if (s !== lastSecond) {
+    lastSecond = s // this ensures it only updates once per second
     time++
     timeLabel.content('\xa0\xa0time: ' + String(time))
-    console.log("time:", time)
-    lastSecond = s // this ensures it only updates once per second
+    cUpdate(time)
+    //console.log("time:", time)
     if (s % 4 === 0) {
-      // PUT STUFF HERE 
       // scale changing
       scaleIndex++
-      if (scaleIndex !== 0 && scaleIndex % scales.length === 0) {scaleIndex = 0}
+      if (scaleIndex % scales.length === 0) {scaleIndex = 0}
       scale = scales[scaleIndex]
-      console.log(scaleIndex, scale[0])
-    }
-    if (time === 10) {
-      volSlider.value = -20
-      synth.set({"oscillator": {"volume": volSlider.value}})
-    }
-    else if (time === 15) {
-      volSlider.value = 0
-      synth.set({"oscillator": {"volume": volSlider.value}})
+      //console.log(scaleIndex, scale[0])
     }
   } 
 }
