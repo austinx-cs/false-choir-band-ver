@@ -93,7 +93,7 @@ goffset = 75
 function cUpdate(t) {
   console.log("cUpdate", t)
   if (t === 0) {scales = intro; releaseAll(); synth.set({"oscillator": {"volume": -50}})}
-  else if (t === 8) {console.log("8!"); gain.gain.rampTo(goffset - 10, 0.1)}
+  else if (t === 8) {gain.gain.rampTo(goffset - 10, 0.1)}
   else if (t === 32) {gain.gain.rampTo(goffset + 20, 12)}
   else if (t === 48) {scales = buildup; releaseAll(); reverb.wet.rampTo(0.8, 16); gain.gain.rampTo(goffset - 10, 4)}
   else if (t === 56) {gain.gain.rampTo(goffset + 20, 8)}
@@ -125,6 +125,7 @@ function syncClock () {
       scaleIndex++
       if (scaleIndex % scales.length === 0) {scaleIndex = 0}
       scale = scales[scaleIndex]
+      releaseAll()
       //console.log(scaleIndex, scale[0])
     }
   } 
@@ -497,7 +498,9 @@ function release(e) {
 }
   
 function releaseAll() {
+  //console.log("hi")
   for (let i = 0; i < all.length; i++) {
+    //console.log(all[i] + "3")
     synth.triggerRelease(all[i] + "3")
     synth.triggerRelease(all[i] + "4")
     synth.triggerRelease(all[i] + "5")
