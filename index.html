@@ -123,7 +123,7 @@ function syncClock () {
       scaleIndex++
       if (scaleIndex % scales.length === 0) {scaleIndex = 0}
       scale = scales[scaleIndex]
-      releaseAll()
+      releaseNonScale()
       //console.log(scaleIndex, scale[0])
     }
   } 
@@ -490,6 +490,10 @@ function keyStart(e) {
 function release(e) {
   const obj = keyMap[e.key]
   if (obj && obj.pressed) {
+    synth.triggerRelease(scale[obj.scaleNum] + obj.octave)
+    synth.triggerRelease(scale[obj.scaleNum] + obj.octave)
+    synth.triggerRelease(scale[obj.scaleNum] + obj.octave)
+    synth.triggerRelease(scale[obj.scaleNum] + obj.octave)
     synth.triggerRelease(scale[obj.scaleNum] + obj.octave)
     obj.pressed = false
   }
