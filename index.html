@@ -123,6 +123,7 @@ function syncClock () {
       scaleIndex++
       if (scaleIndex % scales.length === 0) {scaleIndex = 0}
       scale = scales[scaleIndex]
+      releaseAll()
       //console.log(scaleIndex, scale[0])
     }
   } 
@@ -502,6 +503,19 @@ function releaseAll() {
     synth.triggerRelease(all[i] + "4")
     synth.triggerRelease(all[i] + "5")
     synth.triggerRelease(all[i] + "6")
+  }
+}
+
+function releaseNonScale() {
+  for (let i = 0; i < all.length; i++) {
+    let inScale = false
+    if (all[i] === scale[0] || all[i] === scale[2] || all[i] === scale[4] || all[i] === scale[5]) {inScale = true}
+    if (!inScale) {
+      synth.triggerRelease(all[i] + "3")
+      synth.triggerRelease(all[i] + "4")
+      synth.triggerRelease(all[i] + "5")
+      synth.triggerRelease(all[i] + "6")
+    }
   }
 }
   
